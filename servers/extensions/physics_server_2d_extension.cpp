@@ -342,6 +342,11 @@ void PhysicsServer2DExtension::_bind_methods() {
 
 	GDVIRTUAL_BIND(_is_flushing_queries);
 	GDVIRTUAL_BIND(_get_process_info, "process_info");
+
+	/**** CUSTOM CODE ****/
+	GDVIRTUAL_BIND(_sync_physics_before_simulation);
+	GDVIRTUAL_BIND(_advance_physics_post_simulation);
+	/**** END CUSTOM CODE ****/
 }
 
 PhysicsServer2DExtension::PhysicsServer2DExtension() {

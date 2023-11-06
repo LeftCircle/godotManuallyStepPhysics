@@ -449,6 +449,11 @@ public:
 	EXBIND0RC(bool, is_flushing_queries)
 	EXBIND1R(int, get_process_info, ProcessInfo)
 
+	/**** Custom Code ****/
+	EXBIND0(sync_physics_before_simulation)
+	EXBIND0(advance_physics_post_simulation)
+	/**** End Custom Code ****/
+
 	PhysicsServer2DExtension();
 	~PhysicsServer2DExtension();
 };

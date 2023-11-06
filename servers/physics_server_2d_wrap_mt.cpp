@@ -135,3 +135,29 @@ PhysicsServer2DWrapMT::~PhysicsServer2DWrapMT() {
 	memdelete(physics_server_2d);
 	//finish();
 }
+
+/**** Custom Code ****/
+void PhysicsServer2DWrapMT::sync_physics_before_simulation(){
+	//print_line("sync_physics_before_simulation from wrapper");
+	get_singleton()->sync();
+	get_singleton()->flush_queries();
+}
+
+void PhysicsServer2DWrapMT::advance_physics_post_simulation(){
+	//print_line("advance_physics_post_simulation from wrapper");
+	
+	const int physics_ticks_per_second = Engine::get_singleton()->get_physics_ticks_per_second();
+	const double physics_step = 1.0 / physics_ticks_per_second;
+	const double time_scale = Engine::get_singleton()->get_time_scale();
+	if (OS::get_singleton()->get_main_loop()->physics_process(physics_step * time_scale)) {
+		end_sync();
+	}
+
+	MessageQueue::get_singleton()-> flush();
+	
+	get_singleton()->end_sync();
+	get_singleton()->step(physics_step * time_scale);
+
+	MessageQueue::get_singleton()-> flush();
+}
+/**** End Custom Code ****/

@@ -83,6 +83,12 @@ public:
 		Vector2 *ptr = nullptr;
 	};
 
+	/**** Custom Code ****/
+	virtual void sync_physics_before_simulation();
+	virtual void advance_physics_post_simulation();
+
+	/**** End Custom Code ****/
+
 	virtual RID world_boundary_shape_create() override;
 	virtual RID separation_ray_shape_create() override;
 	virtual RID segment_shape_create() override;

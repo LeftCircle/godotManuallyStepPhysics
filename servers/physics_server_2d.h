@@ -229,6 +229,11 @@ public:
 		SHAPE_CUSTOM, ///< Server-Implementation based custom shape, calling shape_create() with this value will result in an error
 	};
 
+	/**** Custom Code ****/
+	virtual void sync_physics_before_simulation() = 0;
+	virtual void advance_physics_post_simulation() = 0;
+	/**** End Custom Code ****/
+
 	virtual RID world_boundary_shape_create() = 0;
 	virtual RID separation_ray_shape_create() = 0;
 	virtual RID segment_shape_create() = 0;

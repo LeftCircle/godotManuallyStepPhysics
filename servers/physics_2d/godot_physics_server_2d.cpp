@@ -41,6 +41,35 @@
 #define FLUSH_QUERY_CHECK(m_object) \
 	ERR_FAIL_COND_MSG(m_object->get_space() && flushing_queries, "Can't change this state while flushing queries. Use call_deferred() or set_deferred() to change monitoring state instead.");
 
+/**** Custom Code ****/
+void GodotPhysicsServer2D::sync_physics_before_simulation(){
+	print_line("sync_physics_before_simulation from GodotPhysicsServer2D");
+	sync();
+	flush_queries();
+
+	const int physics_ticks_per_second = Engine::get_singleton()->get_physics_ticks_per_second();
+	const double physics_step = 1.0 / physics_ticks_per_second;
+	const double time_scale = Engine::get_singleton()->get_time_scale();
+	if (OS::get_singleton()->get_main_loop()->physics_process(physics_step * time_scale)) {
+		end_sync();
+	}
+}
+
+void GodotPhysicsServer2D::advance_physics_post_simulation(){
+	print_line("advance_physics_post_simulation from GodotPhysicsServer2D");
+	MessageQueue::get_singleton()-> flush();
+
+	const int physics_ticks_per_second = Engine::get_singleton()->get_physics_ticks_per_second();
+	const double physics_step = 1.0 / physics_ticks_per_second;
+	const double time_scale = Engine::get_singleton()->get_time_scale();
+	
+	end_sync();
+	step(physics_step * time_scale);
+
+	MessageQueue::get_singleton()-> flush();
+}
+/**** End Custom Code ****/
+
 RID GodotPhysicsServer2D::_shape_create(ShapeType p_shape) {
 	GodotShape2D *shape = nullptr;
 	switch (p_shape) {

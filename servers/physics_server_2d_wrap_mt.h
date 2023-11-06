@@ -317,6 +317,11 @@ public:
 	virtual void flush_queries() override;
 	virtual void finish() override;
 
+	/**** Custom Code ****/
+	virtual void sync_physics_before_simulation() override;
+	virtual void advance_physics_post_simulation() override;
+	/**** End Custom Code ****/
+
 	virtual bool is_flushing_queries() const override {
 		return physics_server_2d->is_flushing_queries();
 	}
